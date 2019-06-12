@@ -1,0 +1,9 @@
+[gd_resource type="InputEventAction" format=2]
+
+[resource]
+
+device = 0
+action = "ui_select"
+pressed = true
+_sections_unfolded = [ "Resource" ]
+
