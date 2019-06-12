@@ -8,9 +8,11 @@ signal hit
 # var b = "textvar"
 export var speed = 400
 var screen_size
+var target = Vector2()
 
 func start_new(pos):
 	position = pos
+	target = pos
 	show()
 	$CollisionShape2D.disabled = false
 
@@ -19,20 +21,28 @@ func _ready():
 	# Initialization here
 	screen_size=get_viewport_rect().size
 	hide()
+	
+func _input(event):
+	if event is InputEventScreenTouch and event.pressed:
+		target = event.position
 
 func _process(delta):
-	# Called every frame. Delta is time since last frame.
-	# Update game logic here.
 	var velocity = Vector2()
-	if Input.is_action_pressed("ui_right"):
-		velocity.x += 1
-	if Input.is_action_pressed("ui_left"):
-		velocity.x -= 1
-	if Input.is_action_pressed("ui_down"):
-		velocity.y += 1
-	if Input.is_action_pressed("ui_up"):
-		velocity.y -= 1
-		
+	# remove keyboard controls
+#	if Input.is_action_pressed("ui_right"):
+#		velocity.x += 1
+#	if Input.is_action_pressed("ui_left"):
+#		velocity.x -= 1
+#	if Input.is_action_pressed("ui_down"):
+#		velocity.y += 1
+#	if Input.is_action_pressed("ui_up"):
+#		velocity.y -= 1
+
+	if position.distance_to(target) >  10:
+		velocity = (target - position).normalized() * speed
+	else:
+		velocity = Vector2()
+
 	if velocity.length() > 0:
 		velocity = velocity.normalized() * speed
 		$AnimatedSprite.play()
